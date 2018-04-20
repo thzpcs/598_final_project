@@ -1,15 +1,19 @@
 from graph import Node, Graph
-
+import numpy as np
 
 class GridWorld(Graph):
-    def __init__(self, x_dim, y_dim, connect8=True):
+    def __init__(self, x_dim, y_dim, z_dim, connect8=True):
         self.x_dim = x_dim
         self.y_dim = y_dim
+        self.z_dim = z_dim
+        
+        self.cells = np.zeros((z_dim, y_dim, x_dim))
+        
         # First make an element for each row (height of grid)
-        self.cells = [0] * y_dim
-        # Go through each element and replace with row (width of grid)
-        for i in range(y_dim):
-            self.cells[i] = [0] * x_dim
+#        self.cells = [0] * y_dim
+#        # Go through each element and replace with row (width of grid)
+#        for i in range(y_dim):
+#            self.cells[i] = [0] * x_dim
         # will this be an 8-connected graph or 4-connected?
         self.connect8 = connect8
         self.graph = {}
@@ -32,36 +36,58 @@ class GridWorld(Graph):
         print('** GridWorld **')
         for row in self.cells:
             print(row)
+            
 
+            
     def printGValues(self):
-        for j in range(self.y_dim):
-            str_msg = ""
-            for i in range(self.x_dim):
-                node_id = 'x' + str(i) + 'y' + str(j)
-                node = self.graph[node_id]
-                if node.g == float('inf'):
-                    str_msg += ' - '
-                else:
-                    str_msg += ' ' + str(node.g) + ' '
-            print(str_msg)
+        for k in range(self.z_dim):
+            for j in range(self.y_dim):
+                str_msg = ""
+                for i in range(self.x_dim):
+                    node_id = 'x' + str(i) + 'y' + str(j) + 'z' + str(k)
+                    node = self.graph[node_id]
+                    if node.g == float('inf'):
+                        str_msg += ' - '
+                    else:
+                        str_msg += ' ' + str(node.g) + ' '
+                print(str_msg)
 
     def generateGraphFromGrid(self):
         edge = 1
-        for i in range(len(self.cells)):
-            row = self.cells[i]
-            for j in range(len(row)):
-                # print('graph node ' + str(i) + ',' + str(j))
-                node = Node('x' + str(i) + 'y' + str(j))
-                if i > 0:  # not top row
-                    node.parents['x' + str(i - 1) + 'y' + str(j)] = edge
-                    node.children['x' + str(i - 1) + 'y' + str(j)] = edge
-                if i + 1 < self.y_dim:  # not bottom row
-                    node.parents['x' + str(i + 1) + 'y' + str(j)] = edge
-                    node.children['x' + str(i + 1) + 'y' + str(j)] = edge
-                if j > 0:  # not left col
-                    node.parents['x' + str(i) + 'y' + str(j - 1)] = edge
-                    node.children['x' + str(i) + 'y' + str(j - 1)] = edge
-                if j + 1 < self.x_dim:  # not right col
-                    node.parents['x' + str(i) + 'y' + str(j + 1)] = edge
-                    node.children['x' + str(i) + 'y' + str(j + 1)] = edge
-                self.graph['x' + str(i) + 'y' + str(j)] = node
+        for k in range(len(self.cells)):
+            for i in range(len(self.cells[k])):
+                row = self.cells[k][i]
+                for j in range(len(row)):
+                    # print('graph node ' + str(i) + ',' + str(j))
+    
+                        node = Node('x' + str(i) + 'y' + str(j) + 'z' + str(k))
+                        
+                        # X
+                        if i > 0:  # not top row
+                            node.parents['x' + str(i - 1) + 'y' + str(j) + 'z' + str(k)] = edge
+                            node.children['x' + str(i - 1) + 'y' + str(j) + 'z' + str(k)] = edge
+                            
+                        if i + 1 < self.y_dim:  # not bottom row
+                            node.parents['x' + str(i + 1) + 'y' + str(j) + 'z' + str(k)] = edge
+                            node.children['x' + str(i + 1) + 'y' + str(j) + 'z' + str(k)] = edge
+                            
+                        
+                        if j > 0:  # not left col
+                            node.parents['x' + str(i) + 'y' + str(j - 1) + 'z' + str(k)] = edge
+                            node.children['x' + str(i) + 'y' + str(j - 1) + 'z' + str(k)] = edge
+                            
+                        if j + 1 < self.x_dim:  # not right col
+                            node.parents['x' + str(i) + 'y' + str(j + 1) + 'z' + str(k)] = edge
+                            node.children['x' + str(i) + 'y' + str(j + 1) + 'z' + str(k)] = edge
+                        
+                        
+                        if k > 0:  # not start matrix
+                            node.parents['x' + str(i) + 'y' + str(j) + 'z' + str(k - 1)] = edge
+                            node.children['x' + str(i) + 'y' + str(j) + 'z' + str(k - 1)] = edge
+                            
+                        if k + 1 < self.z_dim:  # not end matrix
+                            node.parents['x' + str(i) + 'y' + str(j) + 'z' + str(k + 1)] = edge
+                            node.children['x' + str(i) + 'y' + str(j) + 'z' + str(k + 1)] = edge
+                            
+                        self.graph['x' + str(i) + 'y' + str(j) + 'z' + str(k)] = node
+

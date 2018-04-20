@@ -94,7 +94,7 @@ def makeGraph():
     graph = addNodeToGraph(graph, 'x3y1', ['x3y2', 'x2y1'])
     graph = addNodeToGraph(graph, 'x3y2', ['x3y1', 'x2y2'])
 
-    g = GridWorld(X_DIM, Y_DIM)
+    g = GridWorld(X_DIM, Y_DIM, Z_DIM)
     # g.graph = graph
     # print(g)
     return g

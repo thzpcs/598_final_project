@@ -8,7 +8,6 @@ Created on Fri Apr 20 05:00:39 2018
 import heapq
 from utils import stateNameToCoords
 
-
 def topKey(queue):
     queue.sort()
     # print(queue)
@@ -17,14 +16,12 @@ def topKey(queue):
     else:
         # print('empty queue!')
         return (float('inf'), float('inf'))
-
-
+    
 def heuristic_from_s(graph, id, s):
     x_distance = abs(int(id.split('x')[1][0]) - int(s.split('x')[1][0]))
     y_distance = abs(int(id.split('y')[1][0]) - int(s.split('y')[1][0]))
     z_distance = abs(int(id.split('z')[1][0]) - int(s.split('z')[1][0]))
     return max(x_distance, y_distance, z_distance)
-
 
 def calculateKey(graph, id, s_current, k_m):
     return (min(graph.graph[id].g, graph.graph[id].rhs) + heuristic_from_s(graph, id, s_current) + k_m, min(graph.graph[id].g, graph.graph[id].rhs))
