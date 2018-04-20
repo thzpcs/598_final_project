@@ -27,6 +27,9 @@ grid[1][1][1] = 1
 
 done = False
 
+# Determines the distance the agent can see ahead
+scan_range = 3
+
 
 if __name__ == "__main__":
 
@@ -34,30 +37,41 @@ if __name__ == "__main__":
 #    s_start = 'x1y2z3'
 #    s_goal = 'x5y4z5'
     
-    world = input("Enter world size (X_size,Y_size,Z_size): " + '\n')
+    
+## Uncomment for input
+    
+#    world = input("Enter world size (X_size,Y_size,Z_size): " + '\n')
+#    
+#    
+#    print("Enter X,Y,Z coordinates like as (1,2,3)" + '\n')
+#    start = input("Enter starting position: ")
+#    
+#    
+#    goal = input("Enter goal position: ")
+    
+    world = '7,7,7'
+    start = '1,2,3'
+    goal = '3,4,5'
+    
     world = world.split(',')
-    
-    print("Enter X,Y,Z coordinates like as (1,2,3)" + '\n')
-    start = input("Enter starting position: ")
     start = start.split(',')
-    
-    goal = input("Enter goal position: ")
     goal = goal.split(',')
     
     
-
+    path = []
     
     
-    s_start = [int(x) for x in start]
-    s_goal = [int(x) for x in goal]
+    s_start_list = [int(x) for x in start]
+    s_goal_list = [int(x) for x in goal]
     worldSize = [int(x) for x in world]
     
     graph = GridWorld(worldSize[0], worldSize[1], worldSize[2])
 
-    
+    s_start = "x" + str(s_start_list[0]) + "y" + str(s_start_list[1]) + "z" + str(s_start_list[2])
+    s_goal = "x" + str(s_goal_list[0]) + "y" + str(s_goal_list[1]) + "z" + str(s_goal_list[2])
 
     graph.setStart(s_start)
-    graph.setGoal(s_goal)
+    graph.setGoal(s_start)
     k_m = 0
     s_last = s_start
     queue = []
@@ -71,7 +85,18 @@ if __name__ == "__main__":
     # -------- Main Program Loop -----------
     
     while not done:
-        s_new, k_m = moveAndRescan(graph, queue, s_current, k_m)
+        s_new, k_m = moveAndRescan(graph, queue, s_current, scan_range, k_m)
+        if s_new == 'goal':
+                    print('Goal Reached!')
+                    done = True
+                    print(str(path))
+        else:
+            # print('setting s_current to ', s_new)
+            s_current = s_new
+            pos_coords = stateNameToCoords(s_current)
+            path.append(s_new)
+        
+
     
 ### Unused loop for PyGame
     
@@ -90,5 +115,5 @@ if __name__ == "__main__":
 #                    s_current = s_new
 #                    pos_coords = stateNameToCoords(s_current)
 #                    # print('got pos coords: ', pos_coords)
-
+    print(str(path))
 

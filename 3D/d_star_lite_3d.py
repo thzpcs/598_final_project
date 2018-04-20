@@ -17,6 +17,8 @@ def topKey(queue):
         # print('empty queue!')
         return (float('inf'), float('inf'))
     
+    
+    
 def heuristic_from_s(graph, id, s):
     x_distance = abs(int(id.split('x')[1][0]) - int(s.split('x')[1][0]))
     y_distance = abs(int(id.split('y')[1][0]) - int(s.split('y')[1][0]))
@@ -137,6 +139,7 @@ def moveAndRescan(graph, queue, s_current, scan_range, k_m):
         s_last = s_current
         s_new = nextInShortestPath(graph, s_current)
         new_coords = stateNameToCoords(s_new)
+        print(str(new_coords))
 
         if(graph.cells[new_coords[1]][new_coords[0]] == -1):  # just ran into new obstacle
             s_new = s_current  # need to hold tight and scan/replan first
