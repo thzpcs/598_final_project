@@ -112,18 +112,19 @@ def scanForObstacles(graph, queue, s_current, scan_range, k_m):
         states_to_update = new_set
 
     new_obstacle = False
-    for state in states_to_update:
-        if states_to_update[state] < 0:  # found cell with obstacle
-            # print('found obstacle in ', state)
-            for neighbor in graph.graph[state].children:
-                # first time to observe this obstacle where one wasn't before
-                if(graph.graph[state].children[neighbor] != float('inf')):
-                    neighbor_coords = stateNameToCoords(state)
-                    graph.cells[neighbor_coords[1]][neighbor_coords[0]] = -2
-                    graph.graph[neighbor].children[state] = float('inf')
-                    graph.graph[state].children[neighbor] = float('inf')
-                    updateVertex(graph, queue, state, s_current, k_m)
-                    new_obstacle = True
+##    for state in states_to_update:
+##        # print(states_to_update[state])
+##        if states_to_update[state] < 0:  # found cell with obstacle
+##            # print('found obstacle in ', state)
+##            for neighbor in graph.graph[state].children:
+##                # first time to observe this obstacle where one wasn't before
+##                if(graph.graph[state].children[neighbor] != float('inf')):
+##                    neighbor_coords = stateNameToCoords(state)
+##                    graph.cells[neighbor_coords[1]][neighbor_coords[0]] = -2
+##                    graph.graph[neighbor].children[state] = float('inf')
+##                    graph.graph[state].children[neighbor] = float('inf')
+##                    updateVertex(graph, queue, state, s_current, k_m)
+##                    new_obstacle = True
         # elif states_to_update[state] == 0: #cell without obstacle
             # for neighbor in graph.graph[state].children:
                 # if(graph.graph[state].children[neighbor] != float('inf')):
@@ -139,9 +140,9 @@ def moveAndRescan(graph, queue, s_current, scan_range, k_m):
         s_last = s_current
         s_new = nextInShortestPath(graph, s_current)
         new_coords = stateNameToCoords(s_new)
-        print(str(new_coords))
+        print(str(new_coords), new_coords)
 
-        if(graph.cells[new_coords[1]][new_coords[0]] == -1):  # just ran into new obstacle
+        if(graph.cells[new_coords[2]][new_coords[1]][new_coords[0]] == -1):  # just ran into new obstacle
             s_new = s_current  # need to hold tight and scan/replan first
 
         results = scanForObstacles(graph, queue, s_new, scan_range, k_m)

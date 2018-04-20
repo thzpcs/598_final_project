@@ -71,8 +71,8 @@ if __name__ == "__main__":
     s_goal = "x" + str(s_goal_list[0]) + "y" + str(s_goal_list[1]) + "z" + str(s_goal_list[2])
 
     graph.setStart(s_start)
-    graph.setGoal(s_start)
-    k_m = 0
+    graph.setGoal(s_goal)
+    k_m = 10
     s_last = s_start
     queue = []
 
@@ -81,11 +81,11 @@ if __name__ == "__main__":
     s_current = s_start
     pos_coords = stateNameToCoords(s_current)
 
-    
     # -------- Main Program Loop -----------
     
     while not done:
         s_new, k_m = moveAndRescan(graph, queue, s_current, scan_range, k_m)
+        print(s_new)
         if s_new == 'goal':
                     print('Goal Reached!')
                     done = True
