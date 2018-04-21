@@ -3,7 +3,7 @@ import numpy as np
 
 from grid import GridWorld
 from utils import stateNameToCoords
-from d_star_lite_3d import initDStarLite, moveAndRescan
+from d_star_lite_3d import initDStarLite, moveAndRescan, generateObstacles, moveObstacles
 from graph import Node, Graph
 
 
@@ -52,6 +52,7 @@ if __name__ == "__main__":
     world = '20,20,20'
     start = '1,1,1'
     goal = '19,19,19'
+    numOb = 80
     
     world = world.split(',')
     start = start.split(',')
@@ -73,16 +74,24 @@ if __name__ == "__main__":
     k_m = 10
     s_last = s_start
     queue = []
+    obstacles = []
+    new_obstacles = []
 
     graph, queue, k_m = initDStarLite(graph, queue, s_start, s_goal, k_m)
 
     s_current = s_start
     pos_coords = stateNameToCoords(s_current)
 
+    for i in range(numOb):
+        obstacles = generateObstacles(worldSize, graph, obstacles)
+        i += 1
+    
+
     # -------- Main Program Loop -----------
     
     while not done:
-        generateObstacles(world, graph, scan_range, speed)
+        print(s_current)
+        new_obstacles = moveObstacles(worldSize, numOb, graph, obstacles)
         s_new, k_m = moveAndRescan(graph, queue, s_current, scan_range, k_m)
         if s_new == 'goal':
                     print('Goal Reached!')
@@ -93,7 +102,7 @@ if __name__ == "__main__":
             s_current = s_new
             pos_coords = stateNameToCoords(s_current)
             path.append(s_new)
-        
+        obstacles = new_obstacles
 
     
 ### Unused loop for PyGame

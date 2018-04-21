@@ -6,6 +6,7 @@ Created on Fri Apr 20 05:00:39 2018
 """
 
 import heapq
+import random
 from utils import stateNameToCoords
 
 def topKey(queue):
@@ -87,7 +88,15 @@ def nextInShortestPath(graph, s_current):
         else:
             raise ValueError('could not find child for transition!')
 
-def generateObstacles(world, graph, scan_range, speed):
+def generateObstacles(world, graph, obstacles):
+    x_Ob = random.randint(1, world[0]-1)
+    y_Ob = random.randint(1, world[1]-1)
+    z_Ob = random.randint(1, world[2]-1)
+    graph.cells[x_Ob][y_Ob][z_Ob] = -1
+    obstacles.append([x_Ob, y_Ob, z_Ob])
+    return obstacles
+
+def moveObstacles(world, numOb, graph, obstacles):
     ##  0 obstacles dont move
     ##  1 obstacles move in x direction
     ##  -1 obstacles move in -x direction
@@ -96,10 +105,67 @@ def generateObstacles(world, graph, scan_range, speed):
     ##  3 obstacles move in z direction
     ##  -3 obstacles move in -z direction
     direction = random.randint(-3, 3)
-    
-    
-    
-    
+    if direction == 1:
+        for i in range(numOb):
+            x_Ob = obstacles[i][0]
+            y_Ob = obstacles[i][1]
+            z_Ob = obstacles[i][2]
+            if x_Ob != world[0]-1:
+                graph.cells[x_Ob][y_Ob][z_Ob] = 0
+                x_Ob = obstacles[i][0]+1
+                graph.cells[x_Ob][y_Ob][z_Ob] = -1
+                obstacles[i][0] = x_Ob
+    elif direction == -1:
+        for i in range(numOb):
+            x_Ob = obstacles[i][0]
+            y_Ob = obstacles[i][1]
+            z_Ob = obstacles[i][2]
+            if x_Ob != 0:
+                graph.cells[x_Ob][y_Ob][z_Ob] = 0
+                x_Ob = obstacles[i][0]-1
+                graph.cells[x_Ob][y_Ob][z_Ob] = -1
+                obstacles[i][0] = x_Ob
+    elif direction == 2:
+        for i in range(numOb):
+            x_Ob = obstacles[i][0]
+            y_Ob = obstacles[i][1]
+            z_Ob = obstacles[i][2]
+            if y_Ob != world[1]-1:
+                graph.cells[x_Ob][y_Ob][z_Ob] = 0
+                y_Ob = obstacles[i][1]+1
+                graph.cells[x_Ob][y_Ob][z_Ob] = -1
+                obstacles[i][1] = y_Ob
+    elif direction == -2:
+        for i in range(numOb):
+            x_Ob = obstacles[i][0]
+            y_Ob = obstacles[i][1]
+            z_Ob = obstacles[i][2]
+            if y_Ob != 0:
+                graph.cells[x_Ob][y_Ob][z_Ob] = 0
+                y_Ob = obstacles[i][1]-1
+                graph.cells[x_Ob][y_Ob][z_Ob] = -1
+                obstacles[i][1] = y_Ob
+    elif direction == 3:
+        for i in range(numOb):
+            x_Ob = obstacles[i][0]
+            y_Ob = obstacles[i][1]
+            z_Ob = obstacles[i][2]
+            if z_Ob != world[2]-1:
+                graph.cells[x_Ob][y_Ob][z_Ob] = 0
+                z_Ob = obstacles[i][2]+1
+                graph.cells[x_Ob][y_Ob][z_Ob] = -1
+                obstacles[i][2] = z_Ob
+    elif direction == -3:
+        for i in range(numOb):
+            x_Ob = obstacles[i][0]
+            y_Ob = obstacles[i][1]
+            z_Ob = obstacles[i][2]
+            if z_Ob != 0:
+                graph.cells[x_Ob][y_Ob][z_Ob] = 0
+                z_Ob = obstacles[i][2]-1
+                graph.cells[x_Ob][y_Ob][z_Ob] = -1
+                obstacles[i][2] = z_Ob
+    return obstacles
 
 def scanForObstacles(graph, queue, s_current, scan_range, k_m):
     states_to_update = {}
@@ -107,7 +173,7 @@ def scanForObstacles(graph, queue, s_current, scan_range, k_m):
     if scan_range >= 1:
         for neighbor in graph.graph[s_current].children:
             neighbor_coords = stateNameToCoords(neighbor)
-            states_to_update[neighbor] = graph.cells[neighbor_coords[2][neighbor_coords[1]][neighbor_coords[0]]
+            states_to_update[neighbor] = graph.cells[neighbor_coords[2]][neighbor_coords[1]][neighbor_coords[0]]
         range_checked = 1
 
     while range_checked < scan_range:
@@ -117,24 +183,24 @@ def scanForObstacles(graph, queue, s_current, scan_range, k_m):
             for neighbor in graph.graph[state].children:
                 if neighbor not in new_set:
                     neighbor_coords = stateNameToCoords(neighbor)
-                    new_set[neighbor] = graph.cells[neighbor_coords[2][neighbor_coords[1]][neighbor_coords[0]]
+                    new_set[neighbor] = graph.cells[neighbor_coords[2]][neighbor_coords[1]][neighbor_coords[0]]
         range_checked += 1
         states_to_update = new_set
 
     new_obstacle = False
-##    for state in states_to_update:
-##        # print(states_to_update[state])
-##        if states_to_update[state] < 0:  # found cell with obstacle
-##            # print('found obstacle in ', state)
-##            for neighbor in graph.graph[state].children:
-##                # first time to observe this obstacle where one wasn't before
-##                if(graph.graph[state].children[neighbor] != float('inf')):
-##                    neighbor_coords = stateNameToCoords(state)
-##                    graph.cells[neighbor_coords[1]][neighbor_coords[0]] = -2
-##                    graph.graph[neighbor].children[state] = float('inf')
-##                    graph.graph[state].children[neighbor] = float('inf')
-##                    updateVertex(graph, queue, state, s_current, k_m)
-##                    new_obstacle = True
+    for state in states_to_update:
+        # print(states_to_update[state])
+        if states_to_update[state] < 0:  # found cell with obstacle
+            # print('found obstacle in ', state)
+            for neighbor in graph.graph[state].children:
+                # first time to observe this obstacle where one wasn't before
+                if(graph.graph[state].children[neighbor] != float('inf')):
+                    neighbor_coords = stateNameToCoords(state)
+                    graph.cells[neighbor_coords[1]][neighbor_coords[0]] = -2
+                    graph.graph[neighbor].children[state] = float('inf')
+                    graph.graph[state].children[neighbor] = float('inf')
+                    updateVertex(graph, queue, state, s_current, k_m)
+                    new_obstacle = True
         # elif states_to_update[state] == 0: #cell without obstacle
             # for neighbor in graph.graph[state].children:
                 # if(graph.graph[state].children[neighbor] != float('inf')):
