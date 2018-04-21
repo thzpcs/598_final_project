@@ -42,11 +42,10 @@ if __name__ == "__main__":
     
     world = input("Enter world size (X_size,Y_size,Z_size): " + '\n')
     
-    
     print("Enter X,Y,Z coordinates like as (1,2,3)" + '\n')
     start = input("Enter starting position: ")
     goal = input("Enter goal position: ")
-    numOb = input("Enter number of dynamic obsticals (integer input only): ")
+    numOb = int(input("Enter number of dynamic obsticals (integer input only): "))
     
 ##    world = '20,20,20'
 ##    start = '1,1,1'
