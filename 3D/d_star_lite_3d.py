@@ -115,6 +115,11 @@ def moveObstacles(world, numOb, graph, obstacles):
                 x_Ob = obstacles[i][0]+1
                 graph.cells[x_Ob][y_Ob][z_Ob] = -1
                 obstacles[i][0] = x_Ob
+            else:
+                graph.cells[x_Ob][y_Ob][z_Ob] = 0
+                x_Ob = 0
+                graph.cells[x_Ob][y_Ob][z_Ob] = -1
+                obstacles[i][0] = x_Ob
     elif direction == -1:
         for i in range(numOb):
             x_Ob = obstacles[i][0]
@@ -123,6 +128,11 @@ def moveObstacles(world, numOb, graph, obstacles):
             if x_Ob != 0:
                 graph.cells[x_Ob][y_Ob][z_Ob] = 0
                 x_Ob = obstacles[i][0]-1
+                graph.cells[x_Ob][y_Ob][z_Ob] = -1
+                obstacles[i][0] = x_Ob
+            else:
+                graph.cells[x_Ob][y_Ob][z_Ob] = 0
+                x_Ob = world[0]-1
                 graph.cells[x_Ob][y_Ob][z_Ob] = -1
                 obstacles[i][0] = x_Ob
     elif direction == 2:
@@ -135,6 +145,11 @@ def moveObstacles(world, numOb, graph, obstacles):
                 y_Ob = obstacles[i][1]+1
                 graph.cells[x_Ob][y_Ob][z_Ob] = -1
                 obstacles[i][1] = y_Ob
+            else:
+                graph.cells[x_Ob][y_Ob][z_Ob] = 0
+                y_Ob = 0
+                graph.cells[x_Ob][y_Ob][z_Ob] = -1
+                obstacles[i][1] = y_Ob
     elif direction == -2:
         for i in range(numOb):
             x_Ob = obstacles[i][0]
@@ -143,6 +158,11 @@ def moveObstacles(world, numOb, graph, obstacles):
             if y_Ob != 0:
                 graph.cells[x_Ob][y_Ob][z_Ob] = 0
                 y_Ob = obstacles[i][1]-1
+                graph.cells[x_Ob][y_Ob][z_Ob] = -1
+                obstacles[i][1] = y_Ob
+            else:
+                graph.cells[x_Ob][y_Ob][z_Ob] = 0
+                y_Ob = world[1]-1
                 graph.cells[x_Ob][y_Ob][z_Ob] = -1
                 obstacles[i][1] = y_Ob
     elif direction == 3:
@@ -155,6 +175,11 @@ def moveObstacles(world, numOb, graph, obstacles):
                 z_Ob = obstacles[i][2]+1
                 graph.cells[x_Ob][y_Ob][z_Ob] = -1
                 obstacles[i][2] = z_Ob
+            else:
+                graph.cells[x_Ob][y_Ob][z_Ob] = 0
+                z_Ob = 0
+                graph.cells[x_Ob][y_Ob][z_Ob] = -1
+                obstacles[i][2] = z_Ob
     elif direction == -3:
         for i in range(numOb):
             x_Ob = obstacles[i][0]
@@ -163,6 +188,11 @@ def moveObstacles(world, numOb, graph, obstacles):
             if z_Ob != 0:
                 graph.cells[x_Ob][y_Ob][z_Ob] = 0
                 z_Ob = obstacles[i][2]-1
+                graph.cells[x_Ob][y_Ob][z_Ob] = -1
+                obstacles[i][2] = z_Ob
+            else:
+                graph.cells[x_Ob][y_Ob][z_Ob] = 0
+                z_Ob = world[2]-1
                 graph.cells[x_Ob][y_Ob][z_Ob] = -1
                 obstacles[i][2] = z_Ob
     return obstacles
