@@ -49,17 +49,13 @@ if __name__ == "__main__":
 #    
 #    goal = input("Enter goal position: ")
     
-    world = '7,7,7'
-    start = '1,2,3'
-    goal = '3,4,5'
+    world = '20,20,20'
+    start = '1,1,1'
+    goal = '19,19,19'
     
     world = world.split(',')
     start = start.split(',')
     goal = goal.split(',')
-    
-    
-    path = []
-    
     
     s_start_list = [int(x) for x in start]
     s_goal_list = [int(x) for x in goal]
@@ -69,6 +65,8 @@ if __name__ == "__main__":
 
     s_start = "x" + str(s_start_list[0]) + "y" + str(s_start_list[1]) + "z" + str(s_start_list[2])
     s_goal = "x" + str(s_goal_list[0]) + "y" + str(s_goal_list[1]) + "z" + str(s_goal_list[2])
+
+    path = [s_start]
 
     graph.setStart(s_start)
     graph.setGoal(s_goal)
@@ -84,12 +82,12 @@ if __name__ == "__main__":
     # -------- Main Program Loop -----------
     
     while not done:
+        generateObstacles(world, graph, scan_range, speed)
         s_new, k_m = moveAndRescan(graph, queue, s_current, scan_range, k_m)
-        print(s_new)
         if s_new == 'goal':
                     print('Goal Reached!')
                     done = True
-                    print(str(path))
+                    print('Path: ', str(path))
         else:
             # print('setting s_current to ', s_new)
             s_current = s_new
@@ -115,5 +113,5 @@ if __name__ == "__main__":
 #                    s_current = s_new
 #                    pos_coords = stateNameToCoords(s_current)
 #                    # print('got pos coords: ', pos_coords)
-    print(str(path))
+
 

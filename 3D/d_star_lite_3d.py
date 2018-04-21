@@ -87,6 +87,19 @@ def nextInShortestPath(graph, s_current):
         else:
             raise ValueError('could not find child for transition!')
 
+def generateObstacles(world, graph, scan_range, speed):
+    ##  0 obstacles dont move
+    ##  1 obstacles move in x direction
+    ##  -1 obstacles move in -x direction
+    ##  2 obstacles move in y direction
+    ##  -2 obstacles move in -y direction
+    ##  3 obstacles move in z direction
+    ##  -3 obstacles move in -z direction
+    direction = random.randint(-3, 3)
+    
+    
+    
+    
 
 def scanForObstacles(graph, queue, s_current, scan_range, k_m):
     states_to_update = {}
@@ -94,10 +107,8 @@ def scanForObstacles(graph, queue, s_current, scan_range, k_m):
     if scan_range >= 1:
         for neighbor in graph.graph[s_current].children:
             neighbor_coords = stateNameToCoords(neighbor)
-            states_to_update[neighbor] = graph.cells[neighbor_coords[1]
-                                                     ][neighbor_coords[0]]
+            states_to_update[neighbor] = graph.cells[neighbor_coords[2][neighbor_coords[1]][neighbor_coords[0]]
         range_checked = 1
-    # print(states_to_update)
 
     while range_checked < scan_range:
         new_set = {}
@@ -106,8 +117,7 @@ def scanForObstacles(graph, queue, s_current, scan_range, k_m):
             for neighbor in graph.graph[state].children:
                 if neighbor not in new_set:
                     neighbor_coords = stateNameToCoords(neighbor)
-                    new_set[neighbor] = graph.cells[neighbor_coords[1]
-                                                    ][neighbor_coords[0]]
+                    new_set[neighbor] = graph.cells[neighbor_coords[2][neighbor_coords[1]][neighbor_coords[0]]
         range_checked += 1
         states_to_update = new_set
 
@@ -140,13 +150,12 @@ def moveAndRescan(graph, queue, s_current, scan_range, k_m):
         s_last = s_current
         s_new = nextInShortestPath(graph, s_current)
         new_coords = stateNameToCoords(s_new)
-        print(str(new_coords), new_coords)
+##        print(str(new_coords), new_coords)
 
         if(graph.cells[new_coords[2]][new_coords[1]][new_coords[0]] == -1):  # just ran into new obstacle
             s_new = s_current  # need to hold tight and scan/replan first
 
         results = scanForObstacles(graph, queue, s_new, scan_range, k_m)
-        # print(graph)
         k_m += heuristic_from_s(graph, s_last, s_new)
         computeShortestPath(graph, queue, s_current, k_m)
 
